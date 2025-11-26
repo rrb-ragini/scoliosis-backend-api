@@ -60,20 +60,21 @@ export default function Page() {
   };
 
   return (
-      {/* HEADER */}
-      <div className="text-center flex flex-col items-center">
-        <img 
-          src="/logo.png" 
-          alt="SpinalSense Logo" 
-          className="h-16 w-auto mb-4"
-        />
-        <h1 className="text-4xl font-bold text-slate-800 tracking-tight">
-          SpinalSense
-        </h1>
-        <p className="text-slate-500 text-lg mt-2">
-          AI-powered Cobb angle detection from your spinal X-ray
-        </p>
-      </div>
+      <div className="space-y-12">
+    {/* HEADER */}
+    <div className="text-center flex flex-col items-center">
+      <img 
+        src="/logo.png" 
+        alt="SpinalSense Logo"
+        className="h-16 w-auto mb-4"
+      />
+      <h1 className="text-4xl font-bold text-slate-800 tracking-tight">
+        SpinalSense
+      </h1>
+      <p className="text-slate-500 text-lg mt-2">
+        AI-powered Cobb angle detection from your spinal X-ray
+      </p>
+    </div>
 
       {/* UPLOAD SECTION */}
       <div className="max-w-3xl mx-auto w-full">
