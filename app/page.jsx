@@ -60,9 +60,13 @@ export default function Page() {
   };
 
   return (
-    <div className="space-y-12">
       {/* HEADER */}
-      <div className="text-center">
+      <div className="text-center flex flex-col items-center">
+        <img 
+          src="/logo.png" 
+          alt="SpinalSense Logo" 
+          className="h-16 w-auto mb-4"
+        />
         <h1 className="text-4xl font-bold text-slate-800 tracking-tight">
           SpinalSense
         </h1>
