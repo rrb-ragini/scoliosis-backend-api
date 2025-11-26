@@ -1,73 +1,50 @@
+// app/page.jsx
 "use client";
-
 import { useState } from "react";
 
 export default function Home() {
-  const [file, setFile] = useState(null);
+  const [image, setImage] = useState(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const uploadXray = async () => {
-    if (!file) return alert("Please upload an X-ray first.");
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    setImage(file);
 
-    const fd = new FormData();
-    fd.append("xray", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
     setLoading(true);
+
     try {
-      const res = await fetch("/api/infer", { method: "POST", body: fd });
-      const json = await res.json();
-      setResult(json);
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      setResult(data);
     } catch (err) {
-      alert("Error: " + err);
+      console.error(err);
+      alert("Something went wrong");
     }
     setLoading(false);
   };
 
-  const formatCobb = (val) => {
-    if (val === undefined || val === null) return "—";
-    return Number(val).toFixed(2);
-  };
-
   return (
-    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 28, fontWeight: 600 }}>SpinalSense — Cobb Angle Detection</h1>
+    <div style={{ textAlign: "center", marginTop: "40px" }}>
+      <h1>SpinalSense</h1>
+      <p>Upload X-ray to detect Cobb's Angle</p>
 
-      <input
-        type="file"
-        accept="image/*"
-        style={{ marginTop: 20 }}
-        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-      />
+      <input type="file" accept="image/*" onChange={handleUpload} />
 
-      <button
-        onClick={uploadXray}
-        disabled={loading}
-        style={{
-          marginTop: 16,
-          padding: "10px 14px",
-          background: "#0070f3",
-          color: "white",
-          borderRadius: 6,
-        }}
-      >
-        {loading ? "Processing..." : "Upload X-ray"}
-      </button>
+      {loading && <p>Processing...</p>}
 
       {result && (
-        <div style={{ marginTop: 30 }}>
-          <h2>Cobb Angle:</h2>
-          <p style={{ fontSize: 20 }}>{formatCobb(result.cobb_angle)}°</p>
-
-          {result.overlay_url && (
-            <img
-              src={result.overlay_url}
-              alt="overlay"
-              style={{ maxWidth: "100%", marginTop: 12, border: "1px solid #ddd" }}
-            />
-          )}
+        <div style={{ marginTop: "20px" }}>
+          <h2>Cobb's Angle: {result.cobb_angle ?? "N/A"}°</h2>
         </div>
       )}
-    </main>
+    </div>
   );
 }
